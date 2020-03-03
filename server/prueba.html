@@ -19,12 +19,15 @@
         var socket = io();
         $('form').submit(function(e){
           e.preventDefault(); // prevents page reloading
-          socket.emit('chat message', $('#m').val());
+          var msj = $('#m').val();
+          // Desde el cliente, emit es el que manda el mensaje
+          socket.emit('chat message', msj);
+          $('#messages').append(`<li align='left'>${msj}</li>`);
           $('#m').val('');
           return false;
         });
         socket.on('chat message', function(msg){
-            $('#messages').append(`<li class='d-flex flex-row-reverse'>${msg}</li>`);
+            $('#messages').append(`<li align='right'>${msg}</li>`);
             console.log("llego un mensaje");
         });
       });
@@ -34,7 +37,6 @@
     <ul id="messages"></ul>
     <form action="">
       <input id="m" autocomplete="off" /><button>Send</button>
-      <button onClick="prueba()">Prueba</button>
     </form>
   </body>
 </html>

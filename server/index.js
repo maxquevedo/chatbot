@@ -12,6 +12,8 @@ app.get('/chat',(req,res) => res.send(usuario))
 
 io.on('connection', function(socket){
     socket.on('chat message', function(msg){
+
+      //broadcast envia el mensaje a todos menos el emisor
       socket.broadcast.emit('chat message', msg);
       if(msg.toLowerCase().includes('horario de atencion')){
         io.emit('chat message','nuestro horario de atencion es de 09:00 a 21:00')
