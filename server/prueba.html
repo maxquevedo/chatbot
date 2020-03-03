@@ -21,14 +21,14 @@
           e.preventDefault(); // prevents page reloading
           var msj = $('#m').val();
           // Desde el cliente, emit es el que manda el mensaje
-          socket.emit('chat message', msj);
+          socket.emit('message', msj);
           $('#messages').append(`<li align='left'>${msj}</li>`);
           $('#m').val('');
           return false;
         });
         socket.on('chat message', function(msg){
+          console.log('mensajito bro: ',msg);
             $('#messages').append(`<li align='right'>${msg}</li>`);
-            console.log("llego un mensaje");
         });
       });
     </script>

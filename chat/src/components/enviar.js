@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
 import $ from 'jquery';
+import io from 'socket.io-client';
 
 class Enviar extends React.Component {
   constructor() {
@@ -20,10 +21,14 @@ class Enviar extends React.Component {
   }
 
   _handleSubmit = (event) =>{
+    const socket = io('http://localhost:3001');
+    var msj = document.getElementById("mensaje");
     event.preventDefault();
-    var socket = require('socket.io-client')('http://localhost:3001');
-    socket.emit('chat message', $('#mensaje').val());
-    document.getElementById("mensaje").value= '';
+    socket.emit('chat message', $('#mensaje').val()); // <- envia el mensaje al socket
+    $('#messages').append(`<li align='left' style='font-size:2em'>${msj.value}</li>`) // <- agrega el mensaje al chat
+    msj.value='';
+
+
   }
 
   render() {

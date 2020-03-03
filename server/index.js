@@ -11,24 +11,30 @@ app.get('/', (req, res) => res.sendFile(__dirname+'/prueba.html'))
 app.get('/chat',(req,res) => res.send(usuario))
 
 io.on('connection', function(socket){
-    socket.on('chat message', function(msg){
-
-      //broadcast envia el mensaje a todos menos el emisor
-      socket.broadcast.emit('chat message', msg);
-      if(msg.toLowerCase().includes('horario de atencion')){
-        io.emit('chat message','nuestro horario de atencion es de 09:00 a 21:00')
+    socket.on('chat message',function(msg){
+      var msj = msg.toLowerCase();
+      /*
+        broadcast envia el mensaje a todos menos al emisor
+        los eventos tipo chat message le llegan al "servidor"
+        y los de evento message al cliente
+      */
+      socket.broadcast.emit('chat message',msg)
+      if(msj.includes('horario de atencion') || msj.includes('horarios de atencion')){
+        socket.broadcast.emit('message','nuestro horario de atencion es de 09:00 a 21:00')
+        console.log("entro en horariosss");
       }
-      if(msg.toLowerCase().includes('sucursales')){
-        io.emit('chat message','Esquina Blanca #0123,Maipú')
-        io.emit('chat message','Esquina Roja #0123,Las Condes')
-        io.emit('chat message','Esquina Negra #0123,Lampa')
-        io.emit('chat message','Esquina Verde #0123,Colina')
-        io.emit('chat message','Esquina Amarilla #0123,Cerro Navia')
-        io.emit('chat message','Esquina Violeta #0123,Pudahuel')
-        io.emit('chat message','Esquina Azul #0123,Conchalí')
+      if(msj.includes('sucursales')){
+        socket.broadcast.emit('message','Esquina Blanca #0123,Maipú')
+        socket.broadcast.emit('message','Esquina Roja #0123,Las Condes')
+        socket.broadcast.emit('message','Esquina Negra #0123,Lampa')
+        socket.broadcast.emit('message','Esquina Verde #0123,Colina')
+        socket.broadcast.emit('message','Esquina Amarilla #0123,Cerro Navia')
+        socket.broadcast.emit('message','Esquina Violeta #0123,Pudahuel')
+        socket.broadcast.emit('message','Esquina Azul #0123,Conchalí')
       }
-  });
+    })
+    socket.on('message', function(msg){
+      socket.broadcast.emit('message', msg);
+    });
 });
-http.listen(PORT, () => {
-    console.log('Conectados desde el backend');
-})
+http.listen(PORT)

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Fragment } from 'react';
 import $ from 'jquery';
+import io from 'socket.io-client';
 
 class Chat extends React.Component {
   constructor() {
@@ -17,28 +18,33 @@ class Chat extends React.Component {
   }
 
   render() {
-    const { historial } = this.state;
+    const { url } = this.state;
+    var sockete = io(url);    
+    /*
+        Es importante diferenciar el tipo de evento, message son los recibidos 
+        y como se ve, para enviar, se usa el evento de chat message.
+    */
+    sockete.on('message', (msg) => {
+      console.log('hnito teni mensaje: ',msg)
+      $("#messages").append(`<li class="text-right" style='font-size:2em'> ${msg}</li>`)
+    })
+
     return <Fragment>
         <div className="w-100" style={{marginLeft:'-6%' }} width="100%" height="100%">
-            <ul id="messages" style={{textDecoration: 'none', listStyleType:'none'}}>
-                <li style={{fontSize:25,fontFamily:'Helvetica,sans-serif' }}>Wena</li>
-            </ul>
-            { this.mostrarHistorial(historial) }
+            <ul id="messages" style={{textDecoration: 'none', listStyleType:'none'}}></ul>
         </div>
     </Fragment>;
   }
 
   componentDidMount(){
-    const { url, username } = this.state;
-    var socket = require('socket.io-client')(url);
-    socket.on('connect', () => {
+    const { url } = this.state;
+    var sockete = io(url);
+    sockete.on('connect', () => {
       console.log("conectado");
     })
-    
-    socket.on('chat message', (msg) => {
-      $("#messages").append(`<li>${username}: ${msg}</li>`)
-    })
   }
+
+
 }
 
 export default Chat;
