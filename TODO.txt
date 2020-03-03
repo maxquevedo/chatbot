@@ -1,0 +1,10 @@
+para arreglar lo de quien manda el mensaje es super facil wn
+teni que dejar de emitirle el mensaje al mismo usuario que lo manda
+y en vez de eso hay que imprimirlo en pantalla al momento de aprentar enter para ponerle estilo ( izquierda)
+
+y los mensajes recibidos ( socket.on('chat message',msg)  son los que tienen que tener estilo derecha )
+en vola igual cambiar los colores 
+
+Para hacer eso (parece que) hay que cambiar la conexión de la app en react porque al parecer 
+socket.io-client no tiene todo lo necesario  -> hacer pruebas con la página web ( localhost:3001 ) 
+a ver que sucede realmente
